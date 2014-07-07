@@ -1,9 +1,9 @@
 'use strict';
-var util = require('util');
-var path = require('path');
+//var util = require('util');
+//var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
-var chalk = require('chalk');
+//var chalk = require('chalk');
 
 
 var ExpressBasicGenerator = yeoman.generators.Base.extend({
@@ -25,14 +25,13 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
 
     var prompts = [{
       type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
+      name: 'useMocha',
+      message: 'Do you want to use Mocha for testing?',
       default: true
     }];
 
     this.prompt(prompts, function (props) {
-      this.someOption = props.someOption;
-
+      this.useMocha = props.useMocha;
       done();
     }.bind(this));
   },
@@ -41,7 +40,17 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
     this.mkdir('app');
     this.mkdir('app/templates');
 
-    this.copy('_package.json', 'package.json');
+    var dependencies = {
+      'express': '>4.0'
+    };
+    if (this.useMocha) {
+      dependencies.mocha = '*';
+    }
+    this.template(
+        '_package.tpl.json',
+        'package.json',
+        {'dependencies': JSON.stringify(dependencies, null, 4)}
+    );
     this.copy('_bower.json', 'bower.json');
   },
 
