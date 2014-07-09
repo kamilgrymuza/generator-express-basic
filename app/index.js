@@ -1,6 +1,6 @@
 'use strict';
 //var util = require('util');
-//var path = require('path');
+var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 //var chalk = require('chalk');
@@ -25,6 +25,11 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
 
     var prompts = [
       {
+        name: 'appName',
+        message: 'What\'s the name of your app?',
+        default: __dirname.split(path.sep)[-1]
+      },
+      {
         type: 'confirm',
         name: 'useMocha',
         message: 'Do you want to use Mocha for testing?',
@@ -39,6 +44,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
+      this.appName = props.appName;
       this.useMocha = props.useMocha;
       this.useBower = props.useBower;
       done();
@@ -52,7 +58,11 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         {'useMocha': this.useMocha}
     );
     if (this.useBower) {
-      this.copy('_bower.json', 'bower.json');
+      this.template(
+        '_bower.tpl.json',
+        'bower.json',
+        {'appName': this.appName}
+      );
     }
   },
 

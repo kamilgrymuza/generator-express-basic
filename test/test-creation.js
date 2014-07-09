@@ -1,5 +1,6 @@
 /*global describe, beforeEach, it */
 'use strict';
+var fs = require('fs');
 var path = require('path');
 var helpers = require('yeoman-generator').test;
 var localHelpers = require('./helpers');
@@ -64,6 +65,25 @@ describe('express-basic generator', function () {
 
       this.app.run({}, function () {
         helpers.assertNoFile('bower.json');
+        done();
+      });
+    });
+
+    it('should fill bower.json with correct content', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useBower': true,
+        'appName': 'foo'
+      });
+
+      this.app.run({}, function () {
+        var bowerJSON = JSON.parse(fs.readFileSync('bower.json', 'utf8'));
+
+        bowerJSON.should.have.property('name');
+        bowerJSON.name.should.be.equal('foo');
+
+        bowerJSON.should.have.property('version');
+        bowerJSON.version.should.be.equal('0.0.1');
+
         done();
       });
     });
