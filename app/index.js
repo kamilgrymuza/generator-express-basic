@@ -67,6 +67,12 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         {'appName': this.appName}
       );
     }
+
+    if (this.useMocha) {
+      var testFileName = 'test/test-' + this.appName + '.js';
+      this.mkdir('test');
+      this.copy('test-app-name.js', testFileName);
+    }
     this.copy('app.js', 'app.js');
   },
 

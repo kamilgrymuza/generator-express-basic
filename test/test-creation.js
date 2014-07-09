@@ -106,29 +106,62 @@ describe('express-basic generator', function () {
 
   describe('mocha support', function () {
 
-    it('should include mocha in devDependencies if user choose to',
+    it('should include test devDepencencies if user chose to use mocha',
       function (done) {
         helpers.mockPrompt(this.app, {
           'useMocha': true
         });
         this.app.run({}, function () {
           localHelpers.checkDevDependencyVersion('mocha', '1.20.x');
+          localHelpers.checkDevDependencyVersion('chai', '1.9.x');
           done();
         });
       }
     );
 
-    it('should not include mocha in the devDependencies if user chose not to',
+    it('should not include test devDependencies if user chose not to use mocha',
       function (done) {
         helpers.mockPrompt(this.app, {
           'useMocha': false
         });
         this.app.run({}, function () {
           localHelpers.checkNoDevDependency('mocha');
+          localHelpers.checkNoDevDependency('chai');
           done();
         });
       }
     );
+
+    describe('example test suite', function () {
+
+      beforeEach(function () {
+        helpers.mockPrompt(this.app, {
+          'appName': 'foo',
+          'useMocha': true
+        });
+      });
+
+      it('should create example test suite if mocha is used', function (done) {
+        this.app.run({}, function () {
+          helpers.assertFile('test/test-foo.js');
+          helpers.assertFileContent(
+            'test/test-foo.js',
+            /^'use strict';\s+/
+          );
+          done();
+        });
+      });
+
+      it('should setup Chai in the example test suite', function (done) {
+        this.app.run({}, function () {
+          helpers.assertFileContent(
+            'test/test-foo.js',
+            /var chai = require\('chai'\);\s{1}chai.should\(\);/
+          );
+          done();
+        });
+      });
+    });
   });
 
   describe('express application', function () {
