@@ -23,15 +23,24 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
     // Have Yeoman greet the user.
     this.log(yosay('Welcome to the marvelous ExpressBasic generator!'));
 
-    var prompts = [{
-      type: 'confirm',
-      name: 'useMocha',
-      message: 'Do you want to use Mocha for testing?',
-      default: true
-    }];
+    var prompts = [
+      {
+        type: 'confirm',
+        name: 'useMocha',
+        message: 'Do you want to use Mocha for testing?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'useBower',
+        message: 'Do you want to use Bower?',
+        default: false
+      },
+    ];
 
     this.prompt(prompts, function (props) {
       this.useMocha = props.useMocha;
+      this.useBower = props.useBower;
       done();
     }.bind(this));
   },
@@ -42,7 +51,9 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         'package.json',
         {'useMocha': this.useMocha}
     );
-    this.copy('_bower.json', 'bower.json');
+    if (this.useBower) {
+      this.copy('_bower.json', 'bower.json');
+    }
   },
 
   projectfiles: function () {

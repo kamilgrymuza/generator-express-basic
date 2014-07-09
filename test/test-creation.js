@@ -44,6 +44,31 @@ describe('express-basic generator', function () {
     });
   });
 
+  describe('bower support', function () {
+
+    it('should create bower.json if user chose to', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useBower': true
+      });
+
+      this.app.run({}, function () {
+        helpers.assertFile('bower.json');
+        done();
+      });
+    });
+
+    it('should not create bower.json if user chose not to', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useBower': false
+      });
+
+      this.app.run({}, function () {
+        helpers.assertNoFile('bower.json');
+        done();
+      });
+    });
+  });
+
   describe('mocha support', function () {
 
     it('should include mocha in devDependencies if user choose to',
