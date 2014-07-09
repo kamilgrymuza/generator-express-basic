@@ -24,12 +24,11 @@ describe('express-basic generator', function () {
     }.bind(this));
   });
 
-  it('should create expected files', function (done) {
+  it('should create project files', function (done) {
     var expected = [
       // add files you expect to exist here.
       '.jshintrc',
-      '.editorconfig',
-      'package.json'
+      '.editorconfig'
     ];
 
     this.app.run({}, function () {
@@ -38,10 +37,31 @@ describe('express-basic generator', function () {
     });
   });
 
-  it('should include express in dependencies', function (done) {
-    this.app.run({}, function () {
-      localHelpers.checkDependencyVersion('express', '4.0.x');
-      done();
+  describe('npm support', function () {
+
+    it('should create package.json', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFile('package.json');
+        done();
+      });
+    });
+
+    it('should fill package.json with correct content', function (done) {
+      helpers.mockPrompt(this.app, {
+        'appName': 'foo'
+      });
+
+      this.app.run({}, function () {
+        var packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+        packageJSON.should.have.property('name');
+        packageJSON.name.should.be.equal('foo');
+
+        packageJSON.should.have.property('version');
+        packageJSON.version.should.be.equal('0.0.1');
+
+        done();
+      });
     });
   });
 
@@ -86,6 +106,13 @@ describe('express-basic generator', function () {
 
         done();
       });
+    });
+  });
+
+  it('should include express in dependencies', function (done) {
+    this.app.run({}, function () {
+      localHelpers.checkDependencyVersion('express', '4.0.x');
+      done();
     });
   });
 

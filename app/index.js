@@ -53,9 +53,12 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
 
   app: function () {
     this.template(
-        '_package.tpl.json',
-        'package.json',
-        {'useMocha': this.useMocha}
+      '_package.tpl.json',
+      'package.json',
+      {
+        'useMocha': this.useMocha,
+        'appName': this.appName
+      }
     );
     if (this.useBower) {
       this.template(
