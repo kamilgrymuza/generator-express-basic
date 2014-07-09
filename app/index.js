@@ -37,9 +37,6 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
   },
 
   app: function () {
-    this.mkdir('app');
-    this.mkdir('app/templates');
-
     this.template(
         '_package.tpl.json',
         'package.json',
