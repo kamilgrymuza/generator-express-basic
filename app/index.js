@@ -67,6 +67,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         {'appName': this.appName}
       );
     }
+    this.copy('app.js', 'app.js');
   },
 
   projectfiles: function () {

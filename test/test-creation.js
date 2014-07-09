@@ -104,13 +104,6 @@ describe('express-basic generator', function () {
     });
   });
 
-  it('should include express in dependencies', function (done) {
-    this.app.run({}, function () {
-      localHelpers.checkDependencyVersion('express', '4.0.x');
-      done();
-    });
-  });
-
   describe('mocha support', function () {
 
     it('should include mocha in devDependencies if user choose to',
@@ -136,5 +129,52 @@ describe('express-basic generator', function () {
         });
       }
     );
+  });
+
+  describe('express application', function () {
+
+    it('should include express in dependencies', function (done) {
+      this.app.run({}, function () {
+        localHelpers.checkDependencyVersion('express', '4.0.x');
+        done();
+      });
+    });
+
+    it('should create the app.js file', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFile('app.js');
+        done();
+      });
+    });
+
+    it('should enforce use of strict mode in app.js', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFileContent(
+          'app.js',
+          /^'use strict';\s+/
+        );
+        done();
+      });
+    });
+
+    it('should require express in app.js file', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFileContent(
+          'app.js',
+          /var express = require\('express'\);/
+        );
+        done();
+      });
+    });
+
+    it('should create an express app in app.js file', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFileContent(
+          'app.js',
+          /var app = express\(\);/
+        );
+        done();
+      });
+    });
   });
 });
