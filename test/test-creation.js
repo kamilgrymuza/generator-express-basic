@@ -23,7 +23,7 @@ describe('express-basic generator', function () {
     }.bind(this));
   });
 
-  it('creates expected files', function (done) {
+  it('should create expected files', function (done) {
     var expected = [
       // add files you expect to exist here.
       '.jshintrc',
@@ -37,7 +37,7 @@ describe('express-basic generator', function () {
     });
   });
 
-  it('lists expressjs as a dependency in package.json', function (done) {
+  it('should include express in dependencies', function (done) {
     this.app.run({}, function () {
       localHelpers.checkDependencyVersion('express', '4.0.x');
       done();
@@ -46,24 +46,28 @@ describe('express-basic generator', function () {
 
   describe('mocha support', function () {
 
-    it('lists mocha as a dependency in package.json', function (done) {
-      helpers.mockPrompt(this.app, {
-        'useMocha': true
-      });
-      this.app.run({}, function () {
-        localHelpers.checkDependencyVersion('mocha', '1.20.x');
-        done();
-      });
-    });
+    it('should include mocha in devDependencies if user choose to',
+      function (done) {
+        helpers.mockPrompt(this.app, {
+          'useMocha': true
+        });
+        this.app.run({}, function () {
+          localHelpers.checkDevDependencyVersion('mocha', '1.20.x');
+          done();
+        });
+      }
+    );
 
-    it('does not list mocha as a dependency if user said no', function (done) {
-      helpers.mockPrompt(this.app, {
-        'useMocha': false
-      });
-      this.app.run({}, function () {
-        localHelpers.checkNoDependency('mocha');
-        done();
-      });
-    });
+    it('should not include mocha in the devDependencies if user chose not to',
+      function (done) {
+        helpers.mockPrompt(this.app, {
+          'useMocha': false
+        });
+        this.app.run({}, function () {
+          localHelpers.checkNoDevDependency('mocha');
+          done();
+        });
+      }
+    );
   });
 });
