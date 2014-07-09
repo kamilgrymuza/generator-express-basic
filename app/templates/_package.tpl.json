@@ -1,5 +1,8 @@
 {
   "name": "package",
   "version": "0.0.0",
-  "dependencies": <%= dependencies %>
+  "dependencies": {<% if (useMocha === true) { %>
+    "mocha": "*",<% } %>
+    "express": ">4.0"
+  }
 }

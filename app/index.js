@@ -40,16 +40,10 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
     this.mkdir('app');
     this.mkdir('app/templates');
 
-    var dependencies = {
-      'express': '>4.0'
-    };
-    if (this.useMocha) {
-      dependencies.mocha = '*';
-    }
     this.template(
         '_package.tpl.json',
         'package.json',
-        {'dependencies': JSON.stringify(dependencies, null, 4)}
+        {'useMocha': this.useMocha}
     );
     this.copy('_bower.json', 'bower.json');
   },

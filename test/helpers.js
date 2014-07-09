@@ -1,25 +1,26 @@
 'use strict';
-var helpers = require('yeoman-generator').test;
+var fs = require('fs');
+var chai = require('chai');
+chai.should();
 
-var checkDependency = function (packageName, version) {
-  var regexp = new RegExp(
-      '"dependencies": {\\s+(?:"\\w+": "[\\d\\.><\\=\\*]+",)*\\s+' +
-      '"' + packageName + '": ' +
-      '"' + version + '"' +
-      '(,\\s+)*(?:"\\w+": "[\\d\\.><\\=\\*]+"(,)*)*\\s+}');
-  helpers.assertFileContent('package.json', regexp);
+var _getPackageDependencies = function () {
+  var packageFileBody = fs.readFileSync('package.json', 'utf8');
+  var packageFileContents = JSON.parse(packageFileBody);
+  return packageFileContents.dependencies;
 };
 
-var checkNoDependency = function (packageName) {
-  var regexp = new RegExp(
-      '"dependencies": {\\s+(?:"\\w+": "[\\d\\.><\\=\\*]+",)*\\s+' +
-      '"' + packageName + '": ' +
-      '"[\\d\\.><\\=\\*]+"' +
-      '(,\\s+)*(?:"\\w+": "[\\d\\.><\\=\\*]+"(,)*)*\\s+}');
-  helpers.assertNoFileContent('package.json', regexp);
+var checkDependencyVersion = function (dependencyName, version) {
+  var dependencies = _getPackageDependencies();
+  dependencies.should.have.property(dependencyName);
+  dependencies[dependencyName].should.be.equal(version);
+};
+
+var checkNoDependency = function (dependencyName) {
+  var dependencies = _getPackageDependencies();
+  dependencies.should.not.have.property(dependencyName);
 };
 
 module.exports = {
-  checkDependency: checkDependency,
+  checkDependencyVersion: checkDependencyVersion,
   checkNoDependency: checkNoDependency
 };

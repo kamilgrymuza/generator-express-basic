@@ -39,29 +39,31 @@ describe('express-basic generator', function () {
 
   it('lists expressjs as a dependency in package.json', function (done) {
     this.app.run({}, function () {
-      localHelpers.checkDependency('express', '>4.0');
+      localHelpers.checkDependencyVersion('express', '>4.0');
       done();
     });
   });
 
-  it('lists mocha as a dependency in package.json', function (done) {
-    helpers.mockPrompt(this.app, {
-      'useMocha': true
+  describe('mocha support', function () {
+
+    it('lists mocha as a dependency in package.json', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useMocha': true
+      });
+      this.app.run({}, function () {
+        localHelpers.checkDependencyVersion('mocha', '*');
+        done();
+      });
     });
-    this.app.run({}, function () {
-      localHelpers.checkDependency('mocha', '\\*');
-      done();
+
+    it('does not list mocha as a dependency if user said no', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useMocha': false
+      });
+      this.app.run({}, function () {
+        localHelpers.checkNoDependency('mocha');
+        done();
+      });
     });
   });
-
-  it('does not list mocha as a dependency if user said no', function (done) {
-    helpers.mockPrompt(this.app, {
-      'useMocha': false
-    });
-    this.app.run({}, function () {
-      localHelpers.checkNoDependency('mocha');
-      done();
-    });
-  });
-
 });
