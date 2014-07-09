@@ -39,7 +39,7 @@ describe('express-basic generator', function () {
 
   it('lists expressjs as a dependency in package.json', function (done) {
     this.app.run({}, function () {
-      localHelpers.checkDependencyVersion('express', '>4.0');
+      localHelpers.checkDependencyVersion('express', '4.0.x');
       done();
     });
   });
@@ -51,7 +51,7 @@ describe('express-basic generator', function () {
         'useMocha': true
       });
       this.app.run({}, function () {
-        localHelpers.checkDependencyVersion('mocha', '*');
+        localHelpers.checkDependencyVersion('mocha', '1.20.x');
         done();
       });
     });
