@@ -12,14 +12,9 @@ describe('express-basic generator', function () {
         return done(err);
       }
 
-      this.app = helpers.createGenerator('express-basic:app', [
-        '../../app'
-      ]);
-
-      helpers.mockPrompt(this.app, {
-        'someOption': true
-      });
+      this.app = helpers.createGenerator('express-basic:app', ['../../app']);
       this.app.options['skip-install'] = true;
+      helpers.mockPrompt(this.app, {});
       done();
     }.bind(this));
   });
