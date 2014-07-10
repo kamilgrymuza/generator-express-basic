@@ -27,7 +27,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
       {
         name: 'appName',
         message: 'What\'s the name of your app?',
-        default: __dirname.split(path.sep)[-1]
+        default: path.resolve('./').split(path.sep).pop()
       },
       {
         type: 'confirm',
