@@ -234,5 +234,15 @@ describe('express-basic generator', function () {
         done();
       });
     });
+
+    it('should export the application from the app module', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFileContent(
+          'app.js',
+          /module.exports = {'app': app};/
+        );
+        done();
+      });
+    });
   });
 });
