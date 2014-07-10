@@ -114,6 +114,7 @@ describe('express-basic generator', function () {
         this.app.run({}, function () {
           localHelpers.checkDevDependencyVersion('mocha', '1.20.x');
           localHelpers.checkDevDependencyVersion('chai', '1.9.x');
+          localHelpers.checkDevDependencyVersion('chai-http', '0.4.x');
           done();
         });
       }
@@ -161,6 +162,17 @@ describe('express-basic generator', function () {
           done();
         });
       });
+
+      it('should setup chai-http in the example test suite', function (done) {
+        this.app.run({}, function () {
+          helpers.assertFileContent(
+            'test/test-foo.js',
+            /chai.use\(require\('chai-http'\)\);/
+          );
+          done();
+        });
+      });
+
     });
   });
 
