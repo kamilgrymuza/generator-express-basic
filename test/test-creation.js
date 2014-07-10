@@ -177,11 +177,11 @@ describe('express-basic generator', function () {
         this.app.run({}, function () {
           helpers.assertFileContent(
             'test/test-foo.js',
-            /var app = require\('app'\);/
+            /var app = require\('..\/app'\);/
           );
           helpers.assertFileContent(
             'test/test-foo.js',
-            /describe.+\s+it.+\s+chai.request\(app\).+get.+res.+\s+.+status\(200\)/
+            /describe.+\s+it.+\s+chai.request\(app.app\).+get.+res.+\s+.+status/
           );
           done();
         });
