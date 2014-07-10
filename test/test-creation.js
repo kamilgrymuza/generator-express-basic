@@ -173,6 +173,19 @@ describe('express-basic generator', function () {
         });
       });
 
+      it('should provide example test', function (done) {
+        this.app.run({}, function () {
+          helpers.assertFileContent(
+            'test/test-foo.js',
+            /var app = require\('app'\);/
+          );
+          helpers.assertFileContent(
+            'test/test-foo.js',
+            /describe.+\s+it.+\s+chai.request\(app\).+get.+res.+\s+.+status\(200\)/
+          );
+          done();
+        });
+      });
     });
   });
 
