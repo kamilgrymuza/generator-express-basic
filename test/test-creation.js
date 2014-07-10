@@ -235,6 +235,16 @@ describe('express-basic generator', function () {
       });
     });
 
+    it('should provide example GET handler in app.js file', function (done) {
+      this.app.run({}, function () {
+        helpers.assertFileContent(
+          'app.js',
+          /app.get.+\s+res.send\(200/
+        );
+        done();
+      });
+    });
+
     it('should export the application from the app module', function (done) {
       this.app.run({}, function () {
         helpers.assertFileContent(
