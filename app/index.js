@@ -41,12 +41,19 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         message: 'Do you want to use Bower?',
         default: false
       },
+      {
+        type: 'confirm',
+        name: 'useGrunt',
+        message: 'Do you want to use Grunt?',
+        default: true
+      }
     ];
 
     this.prompt(prompts, function (props) {
       this.appName = props.appName;
       this.useMocha = props.useMocha;
       this.useBower = props.useBower;
+      this.useGrunt = props.useGrunt;
       done();
     }.bind(this));
   },
@@ -57,13 +64,21 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
       'package.json',
       {
         'useMocha': this.useMocha,
-        'appName': this.appName
+        'useGrunt': this.useGrunt,
+        'appName': this.appName,
       }
     );
     if (this.useBower) {
       this.template(
         '_bower.tpl.json',
         'bower.json',
+        {'appName': this.appName}
+      );
+    }
+    if (this.useGrunt) {
+      this.template(
+        'Gruntfile.tpl.js',
+        'Gruntfile.js',
         {'appName': this.appName}
       );
     }

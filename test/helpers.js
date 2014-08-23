@@ -42,10 +42,20 @@ var checkNoDependency = function (dependencyName) {
   _checkNoDependency(dependencyName, false);
 };
 
+var checkPackageJsonValid = function () {
+  var packageFileBody = fs.readFileSync('package.json', 'utf8');
+  try {
+    JSON.parse(packageFileBody);
+  } catch (e) {
+    throw e;
+  }
+};
+
 
 module.exports = {
   checkDependencyVersion: checkDependencyVersion,
   checkNoDependency: checkNoDependency,
   checkDevDependencyVersion: checkDevDependencyVersion,
-  checkNoDevDependency: checkNoDevDependency
+  checkNoDevDependency: checkNoDevDependency,
+  checkPackageJsonValid: checkPackageJsonValid
 };

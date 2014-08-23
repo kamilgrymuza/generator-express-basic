@@ -184,8 +184,171 @@ describe('express-basic generator', function () {
           );
           helpers.assertFileContent(
             'test/test-foo.js',
-            /describe.+\s+it.+\s+chai.request\(app.app\).+get.+res.+\s+.+status/
+            /describe.+\s+it.+\s+chai.request\(app\).+get.+res.+\s+.+status/
           );
+          done();
+        });
+      });
+    });
+  });
+
+  describe('grunt support', function () {
+
+    it('should create Gruntfile if user chose to', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useGrunt': true
+      });
+
+      this.app.run({}, function () {
+        helpers.assertFile('Gruntfile.js');
+        done();
+      });
+    });
+
+    it('should not create Gruntfile if user chose not to', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useGrunt': false
+      });
+
+      this.app.run({}, function () {
+        helpers.assertNoFile('Gruntfile.js');
+        done();
+      });
+    });
+
+    it('should create Gruntfile with correct structure', function (done) {
+      helpers.mockPrompt(this.app, {
+        'useGrunt': true
+      });
+
+      this.app.run({}, function () {
+        helpers.assertFileContent('Gruntfile.js', /^'use strict';/);
+        helpers.assertFileContent(
+          'Gruntfile.js',
+          /var gruntConfig = {(\s|.)*};/
+        );
+
+        helpers.assertFileContent(
+          'Gruntfile.js',
+          /module.exports = function \(grunt\)/
+        );
+        helpers.assertFileContent(
+          'Gruntfile.js',
+          /gruntConfig.pkg = grunt.file.readJSON\('package.json'\);/
+        );
+        helpers.assertFileContent(
+          'Gruntfile.js',
+          /grunt.initConfig\(gruntConfig\)/
+        );
+        done();
+      });
+    });
+
+    it('should not break package.json if both mocha and grunt are used',
+        function (done) {
+        helpers.mockPrompt(this.app, {
+          'useMocha': true,
+          'useGrunt': true
+        });
+        this.app.run({}, function () {
+          localHelpers.checkPackageJsonValid();
+          done();
+        });
+      }
+    );
+
+    describe('express task', function () {
+
+      it('should include grunt-express in devDepencencies if grunt is used',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useGrunt': true
+          });
+          this.app.run({}, function () {
+            localHelpers.checkDevDependencyVersion('grunt-express', '1.0.x');
+            done();
+          });
+        }
+      );
+
+      it('should include grunt-contrib-watch in devDepencencies if grunt is used',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useGrunt': true
+          });
+          this.app.run({}, function () {
+            localHelpers.checkDevDependencyVersion('grunt-contrib-watch', '0.6.x');
+            done();
+          });
+        }
+      );
+
+      it('should not include grunt-express in devDependencies if grunt is not used',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useGrunt': false
+          });
+          this.app.run({}, function () {
+            localHelpers.checkNoDevDependency('grunt-express');
+            done();
+          });
+        }
+      );
+
+      it('should not include grunt-contrib-watch in devDependencies if grunt is not used',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useGrunt': false
+          });
+          this.app.run({}, function () {
+            localHelpers.checkNoDevDependency('grunt-contrib-watch');
+            done();
+          });
+        }
+      );
+
+      it('should load the "express" task if grunt is used', function (done) {
+        helpers.mockPrompt(this.app, {
+          'useGrunt': true
+        });
+
+        this.app.run({}, function () {
+          helpers.assertFileContent(
+            'Gruntfile.js', /grunt\.loadNpmTasks\('grunt-express'\);/);
+          done();
+        });
+      });
+
+      it('should setup the "express" task if grunt is used', function (done) {
+        helpers.mockPrompt(this.app, {
+          'useGrunt': true
+        });
+
+        this.app.run({}, function () {
+          var gruntfile = require('./temp/Gruntfile');
+          var grunt = require('grunt');
+          var gruntConfig = gruntfile(grunt);
+          gruntConfig.should.have.property('express');
+
+          var express = gruntConfig.express;
+          express.should.have.property('server');
+
+          var server = express.server;
+          server.should.have.property('options');
+          server.options.server.should.contain('app.js');
+          done();
+        });
+      });
+
+      it('should make the express task the default', function (done) {
+        helpers.mockPrompt(this.app, {
+          'useGrunt': true
+        });
+
+        this.app.run({}, function () {
+          helpers.assertFileContent(
+            'Gruntfile.js',
+            /grunt\.registerTask\('default', \['express', 'express-keepalive'\]\);/);
           done();
         });
       });
@@ -252,7 +415,7 @@ describe('express-basic generator', function () {
       this.app.run({}, function () {
         helpers.assertFileContent(
           'app.js',
-          /module.exports = {'app': app};/
+          /module.exports = app;/
         );
         done();
       });
