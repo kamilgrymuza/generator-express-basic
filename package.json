@@ -17,7 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- -R spec"
   },
   "files": [
     "app"
@@ -31,9 +31,10 @@
     "yosay": "^0.1.0"
   },
   "devDependencies": {
+    "chai": "~1.9.1",
+    "istanbul": "^0.3.0",
     "mocha": "*",
-    "underscore": "~1.6.0",
-    "chai": "~1.9.1"
+    "underscore": "~1.6.0"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"
