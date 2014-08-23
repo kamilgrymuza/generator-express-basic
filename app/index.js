@@ -7,7 +7,7 @@ var yosay = require('yosay');
 
 /* istanbul ignore next */
 var ifUseMocha = function (responses) {
-  return responses.useMohca;
+  return responses.useMocha;
 };
 
 var ExpressBasicGenerator = yeoman.generators.Base.extend({
