@@ -35,6 +35,7 @@
     "fixture-stdout": "^0.2.1",
     "istanbul": "^0.3.0",
     "mocha": "*",
+    "grunt": "0.4.x",
     "underscore": "~1.6.0"
   },
   "peerDependencies": {
