@@ -10,5 +10,8 @@
     "chai-http": "0.4.x"<% if (useGrunt === true) {%>,<%}%><% } %><%if (useGrunt === true) {%>
     "grunt-express": "1.0.x",
     "grunt-contrib-watch": "0.6.x"<% } %>
-  }
+  },
+  "scripts": {<% if (useMocha === true) { %>
+    "test": "./node_modules/.bin/mocha"
+  <% } %>}
 }

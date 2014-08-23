@@ -136,6 +136,39 @@ describe('express-basic generator', function () {
       }
     );
 
+    it('should setup npm test task if user chose to use mocha',
+      function (done) {
+        helpers.mockPrompt(this.app, {
+          'useMocha': true
+        });
+        this.app.run({}, function () {
+          var packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+          packageJSON.should.have.property('scripts');
+          packageJSON.scripts.should.have.property('test');
+          packageJSON.scripts.test.should.be.equal(
+            './node_modules/.bin/mocha');
+          done();
+        });
+      }
+    );
+
+    it('should not setup npm test task if user chose not to use mocha',
+      function (done) {
+        helpers.mockPrompt(this.app, {
+          'useMocha': false
+        });
+        this.app.run({}, function () {
+          var packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+          if (packageJSON.scripts !== undefined) {
+            packageJSON.scripts.should.not.have.property('test');
+          }
+          done();
+        });
+      }
+    );
+
     describe('example test suite', function () {
 
       beforeEach(function () {
