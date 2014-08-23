@@ -37,6 +37,15 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
       },
       {
         type: 'confirm',
+        name: 'useIstanbul',
+        message: 'Do you want to use Istanbul for coverage measurement?',
+        default: true,
+        when: function (responses) {
+          return responses.useMocha;
+        }
+      },
+      {
+        type: 'confirm',
         name: 'useBower',
         message: 'Do you want to use Bower?',
         default: false
@@ -52,6 +61,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
     this.prompt(prompts, function (props) {
       this.appName = props.appName;
       this.useMocha = props.useMocha;
+      this.useIstanbul = props.useIstanbul;
       this.useBower = props.useBower;
       this.useGrunt = props.useGrunt;
       done();
@@ -64,6 +74,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
       'package.json',
       {
         'useMocha': this.useMocha,
+        'useIstanbul': this.useIstanbul,
         'useGrunt': this.useGrunt,
         'appName': this.appName,
       }

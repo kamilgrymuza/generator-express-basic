@@ -5,13 +5,16 @@
     "express": "4.0.x"
   },
   "devDependencies": {<% if (useMocha === true) { %>
-    "mocha": "1.20.x",
+    "mocha": "1.20.x",<% if (useIstanbul === true) { %>
+    "istanbul": "0.3.x", <% } %>
     "chai": "1.9.x",
     "chai-http": "0.4.x"<% if (useGrunt === true) {%>,<%}%><% } %><%if (useGrunt === true) {%>
     "grunt-express": "1.0.x",
     "grunt-contrib-watch": "0.6.x"<% } %>
   },
-  "scripts": {<% if (useMocha === true) { %>
+  "scripts": {<% if (useIstanbul === true) { %>
+    "test": "./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha"
+  <% } else if (useMocha === true) { %>
     "test": "./node_modules/.bin/mocha"
   <% } %>}
 }

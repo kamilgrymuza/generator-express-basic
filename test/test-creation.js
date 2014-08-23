@@ -223,6 +223,53 @@ describe('express-basic generator', function () {
         });
       });
     });
+
+    describe('coverage measurement', function () {
+
+      it('should include istanbul in devDepencencies if user chose to use it',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useMocha': true,
+            'useIstanbul': true
+          });
+          this.app.run({}, function () {
+            localHelpers.checkDevDependencyVersion('istanbul', '0.3.x');
+            done();
+          });
+        }
+      );
+
+      it('should not include istanbul in devDependencies if user chose not to',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useMocha': true,
+            'useIstanbul': false
+          });
+          this.app.run({}, function () {
+            localHelpers.checkNoDevDependency('istanbul');
+            done();
+          });
+        }
+      );
+
+      it('should instrument npm test task if user chose to use istanbul',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useMocha': true,
+            'useIstanbul': true
+          });
+          this.app.run({}, function () {
+            var packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+            packageJSON.should.have.property('scripts');
+            packageJSON.scripts.should.have.property('test');
+            packageJSON.scripts.test.should.be.equal(
+              './node_modules/.bin/istanbul test ./node_modules/.bin/_mocha');
+            done();
+          });
+        }
+      );
+    });
   });
 
   describe('grunt support', function () {
