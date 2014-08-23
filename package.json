@@ -1,7 +1,7 @@
 {
   "name": "generator-express-basic",
   "version": "0.1.0",
-  "description": "Generates basic ExpressJS app with optional mocha, istanbul, bower, grunt.",
+  "description": "ExpressJS with optional mocha, istanbul, bower, grunt.",
   "license": "MIT",
   "main": "app/index.js",
   "repository": {
