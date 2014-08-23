@@ -4,4 +4,6 @@ node_js:
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-express-basic' ]; then cd .. && eval "mv $currentfolder generator-express-basic" && cd generator-express-basic; fi
+after_script:
+    - npm run coveralls
 
