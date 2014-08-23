@@ -5,12 +5,17 @@ var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 //var chalk = require('chalk');
 
+/* istanbul ignore next */
+var ifUseMocha = function (responses) {
+  return responses.useMohca;
+};
 
 var ExpressBasicGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../package.json');
 
     this.on('end', function () {
+      /* istanbul ignore next */
       if (!this.options['skip-install']) {
         this.installDependencies();
       }
@@ -40,9 +45,7 @@ var ExpressBasicGenerator = yeoman.generators.Base.extend({
         name: 'useIstanbul',
         message: 'Do you want to use Istanbul for coverage measurement?',
         default: true,
-        when: function (responses) {
-          return responses.useMocha;
-        }
+        when: ifUseMocha
       },
       {
         type: 'confirm',

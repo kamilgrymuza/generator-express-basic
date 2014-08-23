@@ -269,6 +269,24 @@ describe('express-basic generator', function () {
           });
         }
       );
+
+      it('should not add npm test task if user chose to use istanbul but not mocha',
+        function (done) {
+          helpers.mockPrompt(this.app, {
+            'useMocha': false,
+            'useIstanbul': true
+          });
+          this.app.run({}, function () {
+            var packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+            if (packageJSON.scripts !== undefined) {
+              packageJSON.scripts.should.not.have.property('test');
+            }
+
+            done();
+          });
+        }
+      );
     });
   });
 
