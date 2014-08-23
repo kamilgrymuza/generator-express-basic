@@ -1,7 +1,8 @@
 {
   "name": "generator-express-basic",
-  "version": "0.0.0",
-  "description": "Generates minimal express app with optional mocha test suite",
+  "version": "0.1.0",
+  "description":
+    "Generates basic ExpressJS app with optional mocha, istanbul, bower, grunt.",
   "license": "MIT",
   "main": "app/index.js",
   "repository": {
@@ -23,7 +24,13 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "express",
+    "expressjs",
+    "mocha",
+    "istanbul",
+    "bower",
+    "grunt"
   ],
   "dependencies": {
     "yeoman-generator": "~0.16.0",
