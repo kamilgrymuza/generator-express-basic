@@ -2,6 +2,7 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var output = require('./mute');
 var helpers = require('yeoman-generator').test;
 var localHelpers = require('./helpers');
 
@@ -15,6 +16,8 @@ describe('express-basic generator', function () {
       this.app = helpers.createGenerator('express-basic:app', ['../../app']);
       this.app.options['skip-install'] = true;
       helpers.mockPrompt(this.app, {});
+      this.app.on('start', output.mute);
+      this.app.on('end', output.unmute);
       done();
     }.bind(this));
   });

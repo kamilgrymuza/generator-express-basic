@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "chai": "~1.9.1",
+    "fixture-stdout": "^0.2.1",
     "istanbul": "^0.3.0",
     "mocha": "*",
     "underscore": "~1.6.0"
